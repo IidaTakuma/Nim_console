@@ -24,17 +24,17 @@ class ComputerAgent(Agent):
             fields[idx] -= cnt
             print("コンピュータは{}の山から{}個石を取った".format(idx, cnt))
         else:
-            # 必勝手がある
-            idx = -1
-            maxi = 0
+            # 必勝手がある場合，全ての山で必勝手の可能性を試す
             for i, f in enumerate(fields):
-                if maxi < f:
-                    maxi = f
-                    idx = i
+                if f == 0:
+                    continue
 
-            xor_sum ^= fields[idx]
-            fields[idx] = xor_sum
-            print("コンピュータは{}の山から{}個石を取った".format(idx, maxi - fields[idx]))
+                xor_sum_tmp = xor_sum ^ f
+                remove = f - xor_sum_tmp
+                if remove <= f and remove > 0:
+                    print("コンピュータは{}の山から{}個石を取った".format(i, remove))
+                    fields[i] -= remove
+                    break
         return fields
 
     def calc_xor_sum(self, fields):

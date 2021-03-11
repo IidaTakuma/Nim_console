@@ -19,6 +19,7 @@ class GameController():
         print("ゲームを開始します.")
 
         print("player1をプレイする場合は[1],computerの場合は[0]を入力してください")
+        print(">> ", end="")
         cmd = int(input())
         if cmd:
             self.players.append(PlayerAgent())
@@ -26,6 +27,7 @@ class GameController():
             self.players.append(ComputerAgent())
 
         print("player2をプレイする場合は[1],computerの場合は[0]を入力してください")
+        print(">> ", end="")
         cmd = int(input())
         if cmd:
             self.players.append(PlayerAgent())
@@ -33,6 +35,7 @@ class GameController():
             self.players.append(ComputerAgent())
 
         print("山の数を指定してください")
+        print(">> ", end="")
         fields_cnt = int(input())
 
         print("石の個数を1~20の範囲でランダムに生成します")
@@ -41,6 +44,7 @@ class GameController():
             self.fields[i] = random.randrange(1, 21)
 
         print("player1が先行の場合は[1], player2が先行の場合は[2]を入力してください")
+        print(">> ", end="")
         self.preceding = int(input())
 
     def process(self):
@@ -71,6 +75,7 @@ class GameController():
         todo: フォーマット指定子で整える
         """
 
+        print("\n====================")
         print("現在{}ターン目です".format(self.round))
 
         # 石の個数を出力
@@ -79,16 +84,16 @@ class GameController():
             print(str(self.fields[i]).rjust(2, "0"), end="|")
         print()
 
-        # 仕切り線
-        for i in range(len(self.fields)):
-            print("----", end="")
-        print()
+        # # 仕切り線
+        # for i in range(len(self.fields)):
+        #     print("----", end="")
+        # print()
 
         # 山の番号を出力
         print("番号|", end="")
         for i in range(len(self.fields)):
             print(str(i).rjust(2, "0"), end="|")
-        print()
+        print("\n====================")
 
     def validate(self, before_fields, after_fields):
 
