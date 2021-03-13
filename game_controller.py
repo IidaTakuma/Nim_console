@@ -1,107 +1,46 @@
 import random
-import numpy as np
+import curses
+from curses import (KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP, KEY_ENTER)
 
-from player_agent import PlayerAgent
-from computer_agent import ComputerAgent
+import config
+from view.render import Render
+
+from view.title_scene import TitleScene
+# from view.game_scene import GameScene
+# from player_agent import PlayerAgent
+# from computer_agent import ComputerAgent
 
 
 class GameController():
+    def __init__(self, scene_number=0):
+        self.scene_number = scene_number
+        self.window = Render.init_cruses(
+            config.WINDOW_HEIGHT, config.WINDOW_WIDTH, config.TIMEOUT)
+        self.cursor_pos = 0
 
-    def __init__(self):
-        self.players = []
-        self.fields = None
-        self.preceding = 0
-        self.round = 0
+        self.title_scene = TitleScene()
 
-        self.setup()
-
-    def setup(self):
-        print("ゲームを開始します.")
-
-        print("player1をプレイする場合は[1],computerの場合は[0]を入力してください")
-        print(">> ", end="")
-        cmd = int(input())
-        if cmd:
-            self.players.append(PlayerAgent())
-        else:
-            self.players.append(ComputerAgent())
-
-        print("player2をプレイする場合は[1],computerの場合は[0]を入力してください")
-        print(">> ", end="")
-        cmd = int(input())
-        if cmd:
-            self.players.append(PlayerAgent())
-        else:
-            self.players.append(ComputerAgent())
-
-        print("山の数を指定してください")
-        print(">> ", end="")
-        fields_cnt = int(input())
-
-        print("石の個数を1~20の範囲でランダムに生成します")
-        self.fields = np.zeros(fields_cnt, dtype=np.int64)
-        for i in range(fields_cnt):
-            self.fields[i] = random.randrange(1, 21)
-
-        print("player1が先行の場合は[1], player2が先行の場合は[2]を入力してください")
-        print(">> ", end="")
-        self.preceding = int(input())
-
-    def process(self):
+    def run(self):
         while True:
-            self.round += 1
-            turn_player = (self.round + self.preceding) % 2
-            self.show_fields()
-            origin_fields = np.array(self.fields)
-            self.players[turn_player].action(self.fields)
+            self.window.clear()
+            self.window.border(0)
 
-            # 変更の正しさを検証する
-            if self.validate(origin_fields, self.fields):
+            if self.scene_number == 0:
+                self.render_title_scene()
+            elif self.scene_number == 1:
                 pass
+                # self.game_scene()
             else:
-                print("不正な変更です")
-                exit()
+                Render.close_cruses()
+                break
+                self.window.refresh()
 
-            if np.all(self.fields == 0):
-                if turn_player == 0:
-                    print("player1の勝ちです")
-                else:
-                    print("player2の勝ちです")
-                exit()
+    def render_title_scene(self):
+        self.title_scene.render(self.window)
+        event = self.window.getch()
 
-    def show_fields(self):
-        """
-        func: 現状の盤面を出力する
-        todo: フォーマット指定子で整える
-        """
+        if event in [KEY_RIGHT, KEY_LEFT, KEY_DOWN, KEY_UP, KEY_ENTER]:
+            self.scene_number = self.title_scene.get_key_event(event)
 
-        print("\n====================")
-        print("現在{}ターン目です".format(self.round))
-
-        # 石の個数を出力
-        print("個数|", end="")
-        for i in range(len(self.fields)):
-            print(str(self.fields[i]).rjust(2, "0"), end="|")
-        print()
-
-        # # 仕切り線
-        # for i in range(len(self.fields)):
-        #     print("----", end="")
-        # print()
-
-        # 山の番号を出力
-        print("番号|", end="")
-        for i in range(len(self.fields)):
-            print(str(i).rjust(2, "0"), end="|")
-        print("\n====================")
-
-    def validate(self, before_fields, after_fields):
-
-        flag = False
-        for i in range(len(before_fields)):
-            if before_fields[i] != after_fields[i]:
-                if flag:
-                    return False
-                else:
-                    flag = True
-        return flag
+    def game_scene(self):
+        pass

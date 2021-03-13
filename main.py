@@ -1,18 +1,16 @@
 import sys
-
 from game_controller import GameController
 
-DEBUG = False
+# GameControllerにゲームの進行状況を持たせる
+# GameControllerをSceneRendererに渡して，ゲームを描画する
+# クラス間の依存関係を確認する
 
 
 def main():
+    # ウィンドウの初期化
     game_controller = GameController()
-    game_controller.process()
+    game_controller.run()
 
 
 if __name__ == "__main__":
-    args = sys.argv
-    if len(args) > 1:
-        if args[1] == "debug" or args[1] == "--d":
-            DEBUG = True
     main()
