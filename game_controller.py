@@ -32,6 +32,10 @@ class GameController():
                 game_scene = GameScene(self.window, 1)
                 game_scene.run()
                 self.scene_index = -1
+            elif self.scene_index == 2:
+                game_scene = GameScene(self.window, 2)
+                game_scene.run()
+                self.scene_index = -1
             elif self.scene_index == 3:
                 # help
                 pass

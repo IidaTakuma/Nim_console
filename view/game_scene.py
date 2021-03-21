@@ -85,7 +85,7 @@ class GameScene():
         self.text = ""
         self.caution = ""
         self.agents = []
-        self.start_player = start_player + 1
+        self.start_player = start_player - 1
         self.fields = np.zeros(PILE_COUNT)
         self.mode = mode
         self.round = 0
@@ -101,19 +101,13 @@ class GameScene():
     def run(self):
         while True:
             if self.game_active:
-                agent_idx = self.round % 2
+                agent_idx = (self.round + self.start_player) % 2
                 if type(self.agents[agent_idx]) is PlayerAgent:
                     self._run_player_turn()
-                # elif type(self.agents[agent_idx]) is ComputerAgent:
-                #     self._run_computer_turn()
-                # else:
-                #     return
-                # return
-                # event = self.window.getch()
-                # if event in [KEY_DOWN, KEY_UP, KEY_LEFT, KEY_RIGHT, KEY_ENTER]:
-                #     scene_index = self.get_key_event(event)
-                #     if scene_index:
-                #         break
+                elif type(self.agents[agent_idx]) is ComputerAgent:
+                    self._run_computer_turn()
+                else:
+                    break
             else:
                 event = self.window.getch()
                 if event == KEY_F1:
@@ -155,11 +149,51 @@ class GameScene():
             self.round += 1
 
     def _run_computer_turn(self):
-        pass
+        turn_player_index = (self.round + self.start_player) % 2
+        turn_player = self.agents[turn_player_index]
+
+        after_action = turn_player.action(self.fields)
+        validated_data = self._validated_computer_action(after_action)
+        if validated_data[0]:
+            selected_pile = validated_data[1]
+            get_stone_cnt = validated_data[2]
+            self.game_log.append(("Computer{}".format(turn_player_index + 1),
+                                  "Get {}stone from No.{}pile.".format(
+                get_stone_cnt,
+                selected_pile
+            )))
+            self.fields[selected_pile] -= get_stone_cnt
+            if self._field_stone_not_remained():
+                self.game_active = False
+                self.game_log.append(("Computer{} WIN !!".format(
+                    turn_player_index + 1),
+                    "PRESS F1 Key to Back Main Menu"))
+        else:
+            self.game_log.append(
+                ("ERROR OCCURED IN", "COMPUTER ACTION VALIDATION"))
+        self.round += 1
+
+    def _validated_computer_action(self, after_action):
+        change_flag = False
+        change_pile = -1
+        change_stone_cnt = -1
+
+        for i in range(len(after_action)):
+            if self.fields[i] != after_action[i]:
+                if change_flag:
+                    return (False, -1, -1)
+                else:
+                    change_flag = True
+                    change_pile = i
+                    change_stone_cnt = self.fields[i] - after_action[i]
+        return (change_flag, change_pile, change_stone_cnt)
+
 
 # カーソルの移動処理を確認する
 
     # 山を選択する際に用いるカーソル移動関数
+
+
     def _cursor_move_left(self):
         if self.pile_cursor_pos_x > PILE_NUMBER_LEFT_X:
             self.pile_cursor_pos_x -= 2
