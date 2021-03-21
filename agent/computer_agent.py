@@ -1,5 +1,5 @@
 import random
-from agent import Agent
+from agent.agent import Agent
 
 
 class ComputerAgent(Agent):

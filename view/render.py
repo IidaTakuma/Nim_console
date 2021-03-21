@@ -24,7 +24,8 @@ class Render():
 
     @classmethod
     def refresh_window(cls, window):
-        pass
+        window.clear()
+        window.border(0)
 
     @classmethod
     def draw_window_flame(cls, window, height, width):
@@ -34,13 +35,13 @@ class Render():
     def draw_rectangle(cls, window, start_y, start_x, end_y, end_x,
                        v_chr="|", h_chr="-", c_chr="+"):
         cls.draw_vertical_line(
-            window, start_x, start_y + 1, end_y - 1, v_chr)
+            window, start_x, start_y, end_y, v_chr)
         cls.draw_vertical_line(
-            window, end_x, start_y + 1, end_y - 1, v_chr)
+            window, end_x, start_y, end_y, v_chr)
         cls.draw_horizintal_line(
-            window, start_y, start_x + 1, end_x - 1, h_chr)
+            window, start_y, start_x, end_x, h_chr)
         cls.draw_horizintal_line(
-            window, end_y, start_x + 1, end_x - 1, h_chr)
+            window, end_y, start_x, end_x, h_chr)
 
         window.addstr(start_y, start_x, c_chr)
         window.addstr(start_y, end_x, c_chr)
@@ -66,9 +67,9 @@ class Render():
     @classmethod
     def draw_matrix(cls, window, matrix, bottom_y, left_x):
         # matrixを描画
-        for y in range(matrix.shape[0]):
-            for x in range(matrix.shape[1]):
-                if matrix[y][x] == 1:
-                    window[bottom_y - y][left_x + x] = "■"
+        for y in range(matrix.shape[1]):
+            for x in range(matrix.shape[0]):
+                if matrix[x][y] == 1:
+                    window.addstr(bottom_y - y, left_x + 2 * x, "■")
                 else:
-                    window[bottom_y - y][left_x + x] = "□"
+                    window.addstr(bottom_y - y, left_x + 2 * x, "□")
