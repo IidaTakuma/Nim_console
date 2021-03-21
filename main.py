@@ -8,7 +8,7 @@ from view.game_scene import TestGameScene
 
 
 def main():
-    game_controller = GameController(-1)
+    game_controller = GameController()
     game_controller.run()
     game_controller.close_game()
 

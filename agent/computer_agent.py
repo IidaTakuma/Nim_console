@@ -33,7 +33,6 @@ class ComputerAgent(Agent):
                 xor_sum_tmp = xor_sum ^ int(f)
                 remove = f - xor_sum_tmp
                 if remove <= f and remove > 0:
-                    print("コンピュータは{}の山から{}個石を取った".format(i, remove))
                     fields_tmp[i] -= remove
                     break
         return fields_tmp

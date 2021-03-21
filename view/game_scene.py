@@ -79,24 +79,36 @@ DEFAULT_PILE_SELECT_CURSOR_Y = SCALE_NUMBER_BOTTOM_Y + 1
 
 
 class GameScene():
-    def __init__(self, window, mode=0, start_player=0):
+    def __init__(self, window, start_player=0):
         self.window = window
         self.game_log = []
         self.text = ""
         self.caution = ""
         self.agents = []
         self.start_player = start_player - 1
-        self.fields = np.zeros(PILE_COUNT)
-        self.mode = mode
+        self.fields = self._generate_field()
         self.round = 0
         self.pile_cursor_pos_x = DEFAULT_PILE_SELECT_CURSOR_X
         self.scale_cursor_pos_y = DEFAULT_PILE_SELECT_CURSOR_Y - 2
-        self._init_game()
         self.game_active = True
 
-    def _init_game(self):
-        self._regist_player(self.mode)
-        self._generate_field()
+    def regist_player_vs_player(self) -> None:
+        self.agents.append(PlayerAgent())
+        self.agents.append(PlayerAgent())
+
+    def regist_player_vs_computer(self) -> None:
+        self.agents.append(PlayerAgent())
+        self.agents.append(ComputerAgent())
+
+    def regist_computer_vs_computer(self) -> None:
+        self.agents.append(ComputerAgent())
+        self.agents.append(ComputerAgent())
+
+    def _generate_field(self) -> np.array:
+        fields = np.zeros(PILE_COUNT)
+        for i in range(PILE_COUNT):
+            fields[i] = random.randrange(1, 21)
+        return fields
 
     def run(self):
         while True:
@@ -193,7 +205,6 @@ class GameScene():
 
     # 山を選択する際に用いるカーソル移動関数
 
-
     def _cursor_move_left(self):
         if self.pile_cursor_pos_x > PILE_NUMBER_LEFT_X:
             self.pile_cursor_pos_x -= 2
@@ -276,10 +287,6 @@ class GameScene():
         elif mode == 2:
             self.agents.append(ComputerAgent())
             self.agents.append(ComputerAgent())
-
-    def _generate_field(self):
-        for i in range(PILE_COUNT):
-            self.fields[i] = random.randrange(1, 21)
 
     def render(self):
         Render.refresh_window(self.window)
