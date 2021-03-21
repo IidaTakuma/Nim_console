@@ -1,13 +1,12 @@
 from agent.computer_agent import ComputerAgent
 from agent.player_agent import PlayerAgent
 import random
-import curses
 from curses import (KEY_DOWN, KEY_UP, KEY_LEFT,
                     KEY_RIGHT, KEY_ENTER, KEY_F1)
 import numpy as np
 
 import config
-from view.render import Render
+from base.render import Render
 
 PILE_COUNT = 8  # 山の個数
 STONE_MAX = 20  # 山ごとの石の個数の上限

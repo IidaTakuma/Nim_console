@@ -1,6 +1,6 @@
 import sys
 from game_controller import GameController
-from view.game_scene import TestGameScene
+from view.game.scene import TestGameScene
 
 # GameControllerにゲームの進行状況を持たせる
 # GameControllerをSceneRendererに渡して，ゲームを描画する

@@ -1,3 +1,2 @@
-from . import render
-# from . import game_scene
-from . import title_scene
+from view.title import *
+from view.game import *

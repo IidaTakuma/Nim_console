@@ -1,7 +1,7 @@
 import config
-from view.render import Render
-from view.title_scene import TitleScene
-from view.game_scene import GameScene
+from base.render import Render
+from view.title.scene import TitleScene
+from view.game.scene import GameScene
 
 """
 scene_index
@@ -23,7 +23,7 @@ class GameController():
     def run(self):
         while True:
             if self.scene_index == -1:
-                title_scene = TitleScene(self.window)
+                title_scene = TitleScene(self.window, scene_number=-1)
                 title_scene.run()
                 self.scene_index = title_scene.selected_menu
             elif 0 <= self.scene_index <= 2:
