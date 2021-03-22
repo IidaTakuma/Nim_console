@@ -1,17 +1,13 @@
 import sys
 from curses import wrapper
-from game_controller import GameController
+from controller import Controller
 from test import TestGameSceneRayout
-
-# GameControllerにゲームの進行状況を持たせる
-# GameControllerをSceneRendererに渡して，ゲームを描画する
-# クラス間の依存関係を確認する
 
 
 def main(stdscr):
-    game_controller = GameController()
-    game_controller.run()
-    game_controller.close_game()
+    controller = Controller()
+    controller.run()
+    controller.close_game()
 
 
 def test():
