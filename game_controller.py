@@ -23,11 +23,13 @@ class GameController():
     def run(self):
         while True:
             if self.scene_index == -1:
-                title_scene = TitleScene(self.window, scene_number=-1)
+                title_scene = TitleScene(
+                    self.window, scene_number=self.scene_index)
                 title_scene.run()
                 self.scene_index = title_scene.selected_menu
             elif 0 <= self.scene_index <= 2:
-                game_scene = GameScene(self.window)
+                game_scene = GameScene(
+                    self.window, scene_number=self.scene_index)
                 if self.scene_index == 0:
                     game_scene.regist_player_vs_computer()
                 elif self.scene_index == 1:

@@ -29,11 +29,8 @@ class TitleSceneRender(Render):
              r" |_| \_|___|_|  |_|  \____\___/|_| |_|___/\___/|_|\___| ",
              ]
 
-    def __init__(self, window):
-        self.window = window
-
     def render(self, selected_menu):
-        self.refresh_window(self.window)
+        self.refresh_window()
         self._render_title()
         self._render_menu(selected_menu)
         self._render_selected_menu(selected_menu)
@@ -42,7 +39,7 @@ class TitleSceneRender(Render):
         for i, line in enumerate(self.TITLE):
             self.window.addstr(
                 TITLE_TOP_Y + i, self._calc_center_x_of_text(line), line)
-        self.draw_horizintal_line(self.window, TITLE_UNDER_LINE_Y, 6, 65)
+        self.draw_horizintal_line(TITLE_UNDER_LINE_Y, 6, 65)
 
     def _render_menu(self, selected_menu):
         for i, menu in enumerate(self.MENUS):
