@@ -195,7 +195,7 @@ class GameScene(Scene):
         if SCALE_NUMBER_TOP_Y <= self.scale_cursor_pos_y <= SCALE_NUMBER_BOTTOM_Y:
             pile_index = self.turn_player.selected_pile
             stone_index = SCALE_NUMBER_BOTTOM_Y - self.scale_cursor_pos_y - 1
-            if stone_index <= self.fields[pile_index]:
+            if stone_index < self.fields[pile_index]:
                 obtained_stone = self.fields[pile_index] - stone_index
                 self.game_log.append(("Player{}".format(
                     self.turn_player_index + 1),
